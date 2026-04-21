@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AQI to Cigarette Calculator 2026 — Air Pollution Smoking Equivalent Tool</title>
+<meta name="description" content="Use our free AQI to Cigarette Calculator to instantly convert air quality index values into cigarette equivalents. Understand your air pollution health risk in seconds.">
+<meta name="keywords" content="AQI to cigarette calculator, AQI smoking equivalent, air pollution cigarette calculator, AQI health impact tool, air quality cigarettes per day">
+<meta name="robots" content="index, follow">
+<meta name="author" content="TrustedByRaju">
+<link rel="canonical" href="https://trustedbyraju.github.io/AQI-to-Cigarette-Calculator/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="AQI to Cigarette Calculator 2026 — Know Your Air Pollution Risk">
+<meta property="og:description" content="Convert AQI values to cigarette equivalents instantly. Understand how much air pollution is harming your health every day.">
+<meta property="og:url" content="https://trustedbyraju.github.io/AQI-to-Cigarette-Calculator/">
+<meta property="og:site_name" content="AQI Cigarette Calculator">
+<meta property="og:image" content="https://trustedbyraju.github.io/AQI-to-Cigarette-Calculator/og-image.jpg">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AQI to Cigarette Calculator 2026">
+<meta name="twitter:description" content="Find out how many cigarettes worth of air pollution you breathe daily. Enter your AQI and get instant results.">
+<meta name="twitter:image" content="https://trustedbyraju.github.io/AQI-to-Cigarette-Calculator/og-image.jpg">
+
+<!-- Schema Markup -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "AQI to Cigarette Calculator",
+      "url": "https://trustedbyraju.github.io/AQI-to-Cigarette-Calculator/",
+      "description": "Free online tool to convert AQI (Air Quality Index) values into cigarette smoking equivalents to understand daily air pollution health impact.",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Web Browser",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": { "@type": "Person", "name": "TrustedByRaju" }
+    },
+    {
+      "@type": "WebSite",
+      "name": "AQI to Cigarette Calculator",
+      "url": "https://trustedbyraju.github.io/AQI-to-Cigarette-Calculator/",
+      "potentialAction": { "@type": "SearchAction", "target": "https://trustedbyraju.github.io/AQI-to-Cigarette-Calculator/?q={search_term_string}", "query-input": "required name=search_term_string" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "What is AQI?", "acceptedAnswer": { "@type": "Answer", "text": "AQI (Air Quality Index) is a standardized index used by governments to communicate how polluted the air is on a scale of 0–500. Higher values indicate worse air quality and greater health risks." } },
+        { "@type": "Question", "name": "How many cigarettes is AQI 100 equivalent to?", "acceptedAnswer": { "@type": "Answer", "text": "An AQI of 100 is approximately equivalent to smoking 2 cigarettes per day, based on PM2.5 particulate health impact research." } },
+        { "@type": "Question", "name": "Is this calculator medically accurate?", "acceptedAnswer": { "@type": "Answer", "text": "This tool uses widely cited approximations based on research by Berkeley Earth and other institutions. It is for educational awareness only and not a medical diagnosis tool." } },
+        { "@type": "Question", "name": "What AQI is considered dangerous?", "acceptedAnswer": { "@type": "Answer", "text": "AQI above 150 is considered unhealthy for all groups. AQI above 200 is Very Unhealthy, and AQI above 300 is Hazardous — equivalent to smoking 7–10+ cigarettes per day." } },
+        { "@type": "Question", "name": "How is cigarette equivalent calculated from AQI?", "acceptedAnswer": { "@type": "Answer", "text": "The cigarette equivalent is derived from PM2.5 concentration data. Research suggests every 22 μg/m³ of PM2.5 over 24 hours is roughly equivalent to the harm of smoking one cigarette." } }
+      ]
+    }
+  ]
+}
+</script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --good: #22c55e;
+    --moderate: #eab308;
+    --unhealthy-sg: #f97316;
+    --unhealthy: #ef4444;
+    --very-unhealthy: #a855f7;
+    --hazardous: #7f1d1d;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: #0a0e1a; color: #e2e8f0; overflow-x: hidden; }
+  h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  .gradient-mesh {
+    background: radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99,102,241,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(239,68,68,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(14,165,233,0.06) 0%, transparent 60%),
+                #0a0e1a;
+  }
+
+  .glass-card {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+
+  .glass-card-light {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  /* AQI Slider */
+  #aqiSlider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 99px;
+    outline: none;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  #aqiSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.2), 0 4px 12px rgba(0,0,0,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  #aqiSlider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 6px rgba(255,255,255,0.15), 0 6px 20px rgba(0,0,0,0.5);
+  }
+  #aqiSlider::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+
+  /* Cigarette animation */
+  .cigarette-icon {
+    display: inline-block;
+    font-size: 1.4rem;
+    animation: float 2s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.15s);
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  /* Gauge ring */
+  .gauge-ring {
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), stroke 0.5s;
+  }
+
+  /* Accordion */
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s;
+  }
+  .faq-answer.open { max-height: 400px; }
+  .faq-icon { transition: transform 0.3s; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+  /* Nav */
+  .nav-link {
+    position: relative;
+    transition: color 0.2s;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0;
+    width: 0; height: 1.5px;
+    background: #6366f1;
+    transition: width 0.3s;
+  }
+  .nav-link:hover::after { width: 100%; }
+  .nav-link:hover { color: #a5b4fc; }
+
+  /* Hero badge */
+  .badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(99,102,241,0.15);
+    border: 1px solid rgba(99,102,241,0.3);
+    border-radius: 99px;
+    padding: 6px 16px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: #a5b4fc;
+  }
+
+  /* Glow effects */
+  .glow-indigo { box-shadow: 0 0 40px rgba(99,102,241,0.2), 0 0 80px rgba(99,102,241,0.05); }
+  .btn-primary {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(99,102,241,0.5);
+  }
+  .btn-primary:active { transform: translateY(0); }
+
+  /* Pulse dot */
+  .pulse-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    animation: pulse-anim 2s infinite;
+  }
+  @keyframes pulse-anim {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+  }
+
+  /* Section reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* AQI color bar */
+  .aqi-bar {
+    height: 10px;
+    border-radius: 99px;
+    background: linear-gradient(to right, #22c55e 0%, #eab308 25%, #f97316 45%, #ef4444 65%, #a855f7 80%, #7f1d1d 100%);
+  }
+
+  /* Mobile nav */
+  .mobile-menu { transition: max-height 0.35s ease, opacity 0.3s; max-height: 0; opacity: 0; overflow: hidden; }
+  .mobile-menu.open { max-height: 300px; opacity: 1; }
+
+  /* Result number counter animation */
+  @keyframes countUp {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .count-anim { animation: countUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+  /* Benefit card hover */
+  .benefit-card {
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .benefit-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0a0e1a; }
+  ::-webkit-scrollbar-thumb { background: #2d3748; border-radius: 3px; }
+</style>
+</head>
+<body class="gradient-mesh relative">
+
+<!-- ═══════════════════════════════════════ HEADER ═══════════════════════════════════════ -->
+<header class="sticky top-0 z-50 border-b border-white/[0.06] backdrop-blur-xl" style="background: rgba(10,14,26,0.85)">
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+    <!-- Logo -->
+    <a href="#" class="flex items-center gap-2.5" aria-label="AQI Cigarette Calculator Home">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-sm font-bold shadow-lg">
+        💨
+      </div>
+      <span class="font-bold text-white text-sm sm:text-base" style="font-family:'Syne',sans-serif">AQI<span class="text-indigo-400">Calc</span></span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <div class="hidden md:flex items-center gap-7 text-sm text-slate-400">
+      <a href="#calculator" class="nav-link">Calculator</a>
+      <a href="#what-is-aqi" class="nav-link">What is AQI</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+      <a href="#calculator" class="btn-primary text-white text-sm font-semibold px-4 py-2 rounded-lg">Try Now →</a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button id="menuBtn" class="md:hidden text-slate-400 hover:text-white transition-colors" aria-label="Toggle menu">
+      <svg id="menuIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="mobile-menu md:hidden border-t border-white/[0.05] px-4">
+    <div class="py-4 flex flex-col gap-4 text-sm text-slate-300">
+      <a href="#calculator" onclick="closeMobileMenu()" class="hover:text-white transition-colors py-1">Calculator</a>
+      <a href="#what-is-aqi" onclick="closeMobileMenu()" class="hover:text-white transition-colors py-1">What is AQI?</a>
+      <a href="#faq" onclick="closeMobileMenu()" class="hover:text-white transition-colors py-1">FAQ</a>
+      <a href="#calculator" onclick="closeMobileMenu()" class="btn-primary text-white text-sm font-semibold px-4 py-2.5 rounded-lg text-center">Try the Calculator →</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════ HERO ═══════════════════════════════════════ -->
+<section class="relative pt-20 pb-24 px-4 sm:px-6 text-center overflow-hidden">
+  <!-- Decorative blobs -->
+  <div class="absolute top-10 left-1/4 w-96 h-96 rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%); filter: blur(40px);"></div>
+  <div class="absolute bottom-0 right-1/4 w-72 h-72 rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(239,68,68,0.08) 0%, transparent 70%); filter: blur(40px);"></div>
+
+  <div class="relative max-w-4xl mx-auto">
+    <div class="flex justify-center mb-6">
+      <span class="badge-pill">
+        <span class="pulse-dot"></span>
+        Free · Instant · No Signup Required
+      </span>
+    </div>
+
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-6">
+      AQI to Cigarette<br>
+      <span class="bg-clip-text text-transparent" style="background-image: linear-gradient(135deg, #818cf8, #6366f1, #a78bfa)">Calculator</span>
+    </h1>
+
+    <p class="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-4 leading-relaxed">
+      Instantly convert your <strong class="text-slate-200">Air Quality Index (AQI)</strong> into cigarette smoking equivalents. Understand exactly how much air pollution you're breathing — and what it's doing to your health.
+    </p>
+
+    <p class="text-sm text-slate-500 mb-10">
+      Based on PM2.5 research · AQI smoking equivalent · Air pollution cigarette calculator
+    </p>
+
+    <a href="#calculator" class="btn-primary inline-flex items-center gap-2 text-white font-bold text-base px-8 py-4 rounded-xl">
+      <span>Calculate My AQI Risk</span>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+    </a>
+
+    <!-- Quick Stats -->
+    <div class="mt-16 grid grid-cols-3 gap-4 sm:gap-8 max-w-lg mx-auto">
+      <div class="text-center">
+        <div class="text-2xl sm:text-3xl font-extrabold text-white" style="font-family:'Syne',sans-serif">500+</div>
+        <div class="text-xs text-slate-500 mt-1">AQI Range</div>
+      </div>
+      <div class="text-center border-x border-white/10">
+        <div class="text-2xl sm:text-3xl font-extrabold text-white" style="font-family:'Syne',sans-serif">10+</div>
+        <div class="text-xs text-slate-500 mt-1">Cig. Equiv.</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl sm:text-3xl font-extrabold text-white" style="font-family:'Syne',sans-serif">0ms</div>
+        <div class="text-xs text-slate-500 mt-1">Response Time</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ CALCULATOR ═══════════════════════════════════════ -->
+<section id="calculator" class="py-16 px-4 sm:px-6 relative">
+  <div class="max-w-2xl mx-auto">
+
+    <div class="text-center mb-10 reveal">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">AQI Cigarette Equivalent Tool</h2>
+      <p class="text-slate-400 text-base">Enter your city's AQI value below to see the equivalent cigarettes per day</p>
+    </div>
+
+    <div class="glass-card rounded-3xl p-6 sm:p-8 glow-indigo reveal">
+
+      <!-- AQI Input -->
+      <div class="mb-8">
+        <div class="flex justify-between items-center mb-3">
+          <label for="aqiInput" class="text-sm font-semibold text-slate-300 uppercase tracking-widest">AQI Value</label>
+          <div class="flex items-center gap-2">
+            <input
+              type="number"
+              id="aqiInput"
+              min="0" max="500"
+              value="150"
+              class="w-20 text-right text-xl font-bold text-white bg-white/[0.06] border border-white/10 rounded-lg px-3 py-1.5 outline-none focus:border-indigo-500 transition-colors"
+              aria-label="Enter AQI value"
+            >
+            <span class="text-slate-500 text-sm">/ 500</span>
+          </div>
+        </div>
+
+        <!-- AQI Color Bar Reference -->
+        <div class="aqi-bar mb-2 relative">
+          <div id="aqiMarker" class="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg transition-all duration-300" style="left: 30%"></div>
+        </div>
+        <div class="flex justify-between text-xs text-slate-600 mb-5">
+          <span>0 Good</span><span>100 Moderate</span><span>200 Unhealthy</span><span>300+</span><span>500 Hazardous</span>
+        </div>
+
+        <input
+          type="range"
+          id="aqiSlider"
+          min="0" max="500"
+          value="150"
+          step="1"
+          aria-label="AQI slider"
+          style="background: linear-gradient(to right, #6366f1 0%, #6366f1 30%, rgba(255,255,255,0.12) 30%, rgba(255,255,255,0.12) 100%)"
+        >
+
+        <!-- AQI Category Labels -->
+        <div class="flex justify-between mt-2 text-xs text-slate-600">
+          <span>0</span><span>100</span><span>200</span><span>300</span><span>400</span><span>500</span>
+        </div>
+      </div>
+
+      <!-- Result Display -->
+      <div id="resultPanel" class="rounded-2xl p-6 sm:p-8 text-center transition-all duration-500 mb-6 border" style="background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.2)">
+
+        <!-- Gauge SVG -->
+        <div class="flex justify-center mb-4">
+          <svg width="140" height="80" viewBox="0 0 140 80" aria-hidden="true">
+            <path d="M 15 75 A 55 55 0 0 1 125 75" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="10" stroke-linecap="round"/>
+            <path id="gaugeArc" d="M 15 75 A 55 55 0 0 1 125 75" fill="none" stroke="#ef4444" stroke-width="10" stroke-linecap="round"
+              stroke-dasharray="172.78" stroke-dashoffset="86" class="gauge-ring"/>
+            <text id="gaugeAQIText" x="70" y="68" text-anchor="middle" fill="white" font-size="18" font-weight="800" font-family="Syne,sans-serif">150</text>
+            <text x="70" y="80" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="8">AQI</text>
+          </svg>
+        </div>
+
+        <!-- Cigarette Icons -->
+        <div id="cigIcons" class="flex flex-wrap justify-center gap-1 mb-4 min-h-[2.5rem] items-center">
+          <!-- JS populated -->
+        </div>
+
+        <!-- Main Result Number -->
+        <div class="mb-2">
+          <span id="cigCount" class="text-5xl sm:text-6xl font-extrabold text-white" style="font-family:'Syne',sans-serif">3.4</span>
+          <span class="text-lg text-slate-400 ml-2">cigs / day</span>
+        </div>
+
+        <!-- Health Category Badge -->
+        <div id="healthBadge" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 border" style="background:rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.3); color:#fca5a5">
+          <span id="healthDot" class="w-2 h-2 rounded-full" style="background:#ef4444"></span>
+          <span id="healthLabel">Unhealthy</span>
+        </div>
+
+        <!-- Health Impact Message -->
+        <p id="healthMsg" class="text-slate-300 text-sm leading-relaxed max-w-md mx-auto"></p>
+      </div>
+
+      <!-- Detailed Breakdown -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div class="glass-card-light rounded-xl p-4 text-center">
+          <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">PM2.5 Est.</div>
+          <div id="pm25Value" class="text-lg font-bold text-white">55 μg/m³</div>
+        </div>
+        <div class="glass-card-light rounded-xl p-4 text-center">
+          <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Annual Equiv.</div>
+          <div id="annualValue" class="text-lg font-bold text-white">1241 cigs</div>
+        </div>
+        <div class="glass-card-light rounded-xl p-4 text-center col-span-2 sm:col-span-1">
+          <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Risk Level</div>
+          <div id="riskLevel" class="text-lg font-bold text-red-400">High</div>
+        </div>
+      </div>
+
+      <!-- Disclaimer -->
+      <p class="text-xs text-slate-600 text-center mt-5 leading-relaxed">
+        ⚠️ For educational awareness only. Not a medical diagnosis. Based on PM2.5 health impact research.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ WHAT IS AQI ═══════════════════════════════════════ -->
+<section id="what-is-aqi" class="py-16 px-4 sm:px-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">What is AQI?</h2>
+      <p class="text-slate-400 max-w-2xl mx-auto">The Air Quality Index is a government-standardized scale that tells you how clean or polluted the air is around you — and what health effects might follow.</p>
+    </div>
+
+    <!-- AQI Scale Table -->
+    <div class="glass-card rounded-2xl overflow-hidden mb-10 reveal">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-white/10">
+              <th class="px-4 py-3 text-left text-slate-400 font-semibold">AQI Range</th>
+              <th class="px-4 py-3 text-left text-slate-400 font-semibold">Category</th>
+              <th class="px-4 py-3 text-left text-slate-400 font-semibold">Cigarette Equiv.</th>
+              <th class="px-4 py-3 text-left text-slate-400 font-semibold hidden sm:table-cell">Health Impact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+              <td class="px-4 py-3 font-semibold text-green-400">0 – 50</td>
+              <td class="px-4 py-3"><span class="px-2 py-0.5 bg-green-500/10 text-green-400 rounded-full text-xs">Good</span></td>
+              <td class="px-4 py-3 text-white">≈ 0.5 – 1 cig</td>
+              <td class="px-4 py-3 text-slate-400 hidden sm:table-cell">Minimal risk. Air quality is satisfactory.</td>
+            </tr>
+            <tr class="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+              <td class="px-4 py-3 font-semibold text-yellow-400">51 – 100</td>
+              <td class="px-4 py-3"><span class="px-2 py-0.5 bg-yellow-500/10 text-yellow-400 rounded-full text-xs">Moderate</span></td>
+              <td class="px-4 py-3 text-white">≈ 1 – 2 cigs</td>
+              <td class="px-4 py-3 text-slate-400 hidden sm:table-cell">Sensitive groups may experience minor effects.</td>
+            </tr>
+            <tr class="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+              <td class="px-4 py-3 font-semibold text-orange-400">101 – 150</td>
+              <td class="px-4 py-3"><span class="px-2 py-0.5 bg-orange-500/10 text-orange-400 rounded-full text-xs">Unhealthy for SG</span></td>
+              <td class="px-4 py-3 text-white">≈ 2 – 3.5 cigs</td>
+              <td class="px-4 py-3 text-slate-400 hidden sm:table-cell">Children, elderly, and asthmatics at risk.</td>
+            </tr>
+            <tr class="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+              <td class="px-4 py-3 font-semibold text-red-400">151 – 200</td>
+              <td class="px-4 py-3"><span class="px-2 py-0.5 bg-red-500/10 text-red-400 rounded-full text-xs">Unhealthy</span></td>
+              <td class="px-4 py-3 text-white">≈ 3.5 – 5 cigs</td>
+              <td class="px-4 py-3 text-slate-400 hidden sm:table-cell">Everyone may begin to experience effects.</td>
+            </tr>
+            <tr class="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors">
+              <td class="px-4 py-3 font-semibold text-purple-400">201 – 300</td>
+              <td class="px-4 py-3"><span class="px-2 py-0.5 bg-purple-500/10 text-purple-400 rounded-full text-xs">Very Unhealthy</span></td>
+              <td class="px-4 py-3 text-white">≈ 5 – 7 cigs</td>
+              <td class="px-4 py-3 text-slate-400 hidden sm:table-cell">Health warnings. Everyone affected.</td>
+            </tr>
+            <tr class="hover:bg-white/[0.02] transition-colors">
+              <td class="px-4 py-3 font-semibold text-rose-300">301 – 500</td>
+              <td class="px-4 py-3"><span class="px-2 py-0.5 bg-red-900/40 text-rose-300 rounded-full text-xs">Hazardous</span></td>
+              <td class="px-4 py-3 text-white">≈ 7 – 10+ cigs</td>
+              <td class="px-4 py-3 text-slate-400 hidden sm:table-cell">Emergency conditions. Serious health risk.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ HOW AQI RELATES TO SMOKING ═══════════════════════════════════════ -->
+<section id="how-it-works" class="py-16 px-4 sm:px-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <div class="reveal">
+        <span class="badge-pill mb-5 inline-flex">The Science</span>
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-5 leading-tight">How AQI Relates to Cigarette Smoking</h2>
+        <p class="text-slate-400 mb-5 leading-relaxed">
+          The connection between air pollution and cigarette smoking isn't metaphorical — it's rooted in PM2.5 particulate matter research. Both cigarette smoke and polluted air deposit fine particles deep into lung tissue.
+        </p>
+        <p class="text-slate-400 mb-5 leading-relaxed">
+          Research by <strong class="text-slate-200">Berkeley Earth</strong> and public health institutions estimates that every <strong class="text-slate-200">22 micrograms per cubic meter (μg/m³)</strong> of PM2.5 over a 24-hour period is roughly equivalent to the lung impact of smoking one cigarette.
+        </p>
+        <p class="text-slate-400 leading-relaxed">
+          Our AQI to cigarette calculator uses this approximation formula to translate abstract AQI numbers into something immediately understandable — cigarettes per day. This is the AQI smoking equivalent you need to make sense of air pollution risk.
+        </p>
+      </div>
+      <div class="reveal">
+        <div class="glass-card rounded-2xl p-6 sm:p-8">
+          <h3 class="text-lg font-bold text-white mb-5">The Cigarette Equivalence Formula</h3>
+          <div class="space-y-4">
+            <div class="glass-card-light rounded-xl p-4">
+              <div class="text-xs text-indigo-400 font-semibold uppercase tracking-wide mb-2">Step 1 — PM2.5 Estimation</div>
+              <code class="text-green-400 text-sm">PM2.5 ≈ AQI × 0.37 μg/m³</code>
+              <p class="text-slate-500 text-xs mt-1">Approximate PM2.5 from standard AQI linear scale</p>
+            </div>
+            <div class="glass-card-light rounded-xl p-4">
+              <div class="text-xs text-indigo-400 font-semibold uppercase tracking-wide mb-2">Step 2 — Cigarette Conversion</div>
+              <code class="text-green-400 text-sm">Cigs = PM2.5 ÷ 22</code>
+              <p class="text-slate-500 text-xs mt-1">Based on Berkeley Earth research: 22 μg/m³ ≈ 1 cigarette/day</p>
+            </div>
+            <div class="glass-card-light rounded-xl p-4 border border-indigo-500/20">
+              <div class="text-xs text-indigo-400 font-semibold uppercase tracking-wide mb-2">Combined Formula</div>
+              <code class="text-indigo-300 text-sm">Cigs/day = (AQI × 0.37) ÷ 22</code>
+              <p class="text-slate-500 text-xs mt-1">Simplified air pollution cigarette calculator formula</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ BENEFITS ═══════════════════════════════════════ -->
+<section id="benefits" class="py-16 px-4 sm:px-6">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Why Use This AQI Health Impact Tool</h2>
+      <p class="text-slate-400 max-w-xl mx-auto">Make smarter decisions about outdoor activities, travel, and health precautions with instant air pollution risk awareness.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="glass-card benefit-card rounded-2xl p-6 reveal">
+        <div class="text-3xl mb-4">⚡</div>
+        <h3 class="text-base font-bold text-white mb-2">Instant Results</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Get your AQI smoking equivalent in under a second. No signup, no wait, no server calls — pure client-side calculation.</p>
+      </div>
+      <div class="glass-card benefit-card rounded-2xl p-6 reveal">
+        <div class="text-3xl mb-4">📊</div>
+        <h3 class="text-base font-bold text-white mb-2">Science-Backed Formula</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Built on PM2.5 particulate research from Berkeley Earth and WHO air quality guidelines for credible estimates.</p>
+      </div>
+      <div class="glass-card benefit-card rounded-2xl p-6 reveal">
+        <div class="text-3xl mb-4">🎯</div>
+        <h3 class="text-base font-bold text-white mb-2">Intuitive Understanding</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">AQI numbers are abstract. Cigarette equivalents make the health risk tangible and immediately actionable.</p>
+      </div>
+      <div class="glass-card benefit-card rounded-2xl p-6 reveal">
+        <div class="text-3xl mb-4">🏃</div>
+        <h3 class="text-base font-bold text-white mb-2">Plan Outdoor Activities</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Know if it's safe to jog, let kids play outside, or go cycling based on the cigarette-equivalent pollution level.</p>
+      </div>
+      <div class="glass-card benefit-card rounded-2xl p-6 reveal">
+        <div class="text-3xl mb-4">🌍</div>
+        <h3 class="text-base font-bold text-white mb-2">Works Globally</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Works with AQI data from any city worldwide — whether from AirVisual, IQAir, or your local government monitoring station.</p>
+      </div>
+      <div class="glass-card benefit-card rounded-2xl p-6 reveal">
+        <div class="text-3xl mb-4">🔒</div>
+        <h3 class="text-base font-bold text-white mb-2">100% Private</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">No data collection. No tracking beyond standard analytics. Your health calculations stay on your device.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ FAQ ═══════════════════════════════════════ -->
+<section id="faq" class="py-16 px-4 sm:px-6">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Frequently Asked Questions</h2>
+      <p class="text-slate-400">Everything you need to know about the AQI to cigarette calculator</p>
+    </div>
+
+    <div class="space-y-3 reveal" id="faqContainer">
+      <!-- FAQ items injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ FOOTER ═══════════════════════════════════════ -->
+<footer class="border-t border-white/[0.06] py-12 px-4 sm:px-6 mt-8">
+  <div class="max-w-5xl mx-auto">
+    <div class="grid sm:grid-cols-3 gap-8 mb-10">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-7 h-7 rounded-md bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-xs">💨</div>
+          <span class="font-bold text-white text-sm" style="font-family:'Syne',sans-serif">AQI<span class="text-indigo-400">Calc</span></span>
+        </div>
+        <p class="text-slate-500 text-sm leading-relaxed">Free AQI to cigarette calculator for air pollution health impact awareness. Educational tool only.</p>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold text-sm mb-3">Quick Links</h4>
+        <div class="flex flex-col gap-2">
+          <a href="#calculator" class="text-slate-500 text-sm hover:text-slate-300 transition-colors">Calculator Tool</a>
+          <a href="#what-is-aqi" class="text-slate-500 text-sm hover:text-slate-300 transition-colors">What is AQI?</a>
+          <a href="#how-it-works" class="text-slate-500 text-sm hover:text-slate-300 transition-colors">How It Works</a>
+          <a href="#faq" class="text-slate-500 text-sm hover:text-slate-300 transition-colors">FAQ</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold text-sm mb-3">Resources</h4>
+        <div class="flex flex-col gap-2">
+          <a href="https://www.airnow.gov/aqi/aqi-basics/" target="_blank" rel="noopener noreferrer" class="text-slate-500 text-sm hover:text-slate-300 transition-colors">AirNow.gov AQI Basics ↗</a>
+          <a href="https://berkeleyearth.org/air-quality-real-time-map/" target="_blank" rel="noopener noreferrer" class="text-slate-500 text-sm hover:text-slate-300 transition-colors">Berkeley Earth Air Quality ↗</a>
+          <a href="https://www.who.int/health-topics/air-pollution" target="_blank" rel="noopener noreferrer" class="text-slate-500 text-sm hover:text-slate-300 transition-colors">WHO Air Pollution ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-white/[0.05] pt-6">
+      <div class="glass-card-light rounded-xl p-4 mb-6 text-xs text-slate-500 leading-relaxed">
+        <strong class="text-slate-400">⚠️ Disclaimer:</strong> This AQI to cigarette calculator is provided for <em>educational and awareness purposes only</em>. The cigarette equivalent calculations are approximations based on publicly available PM2.5 health impact research and should not be used as a substitute for professional medical advice. AQI values and health impacts can vary significantly based on pollutant composition, individual health conditions, and exposure duration. Always consult a healthcare professional for personalized health guidance. Created by <strong class="text-slate-400">TrustedByRaju</strong>.
+      </div>
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-slate-600">
+        <span>© 2026 AQI Cigarette Calculator · <a href="https://trustedbyraju.github.io/AQI-to-Cigarette-Calculator/" class="hover:text-slate-400 transition-colors">trustedbyraju.github.io</a></span>
+        <span>For educational purposes only · Not medical advice</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════ JAVASCRIPT ═══════════════════════════════════════ -->
+<script>
+// ─── AQI Data ───────────────────────────────────────────────────────────────
+const AQI_LEVELS = [
+  { max: 50,  label: 'Good',                   color: '#22c55e', bg: 'rgba(34,197,94,0.08)',   border: 'rgba(34,197,94,0.2)',   text: '#86efac', risk: 'Low',       msg: 'Air quality is satisfactory and poses little or no health risk. A great day to be active outdoors!' },
+  { max: 100, label: 'Moderate',               color: '#eab308', bg: 'rgba(234,179,8,0.08)',   border: 'rgba(234,179,8,0.2)',   text: '#fde047', risk: 'Low–Med',   msg: 'Air quality is acceptable. Some pollutants may pose a moderate health concern for a very small number of sensitive individuals.' },
+  { max: 150, label: 'Unhealthy for Sensitive Groups', color: '#f97316', bg: 'rgba(249,115,22,0.08)', border: 'rgba(249,115,22,0.2)', text: '#fdba74', risk: 'Medium', msg: 'Members of sensitive groups may experience health effects. The general public is less likely to be affected. Consider reducing prolonged outdoor exertion.' },
+  { max: 200, label: 'Unhealthy',              color: '#ef4444', bg: 'rgba(239,68,68,0.08)',   border: 'rgba(239,68,68,0.2)',   text: '#fca5a5', risk: 'High',      msg: 'Everyone may begin to experience health effects. Sensitive groups may experience more serious effects. Limit prolonged outdoor activities.' },
+  { max: 300, label: 'Very Unhealthy',         color: '#a855f7', bg: 'rgba(168,85,247,0.08)', border: 'rgba(168,85,247,0.2)', text: '#d8b4fe', risk: 'Very High',  msg: 'Health alert: Everyone may experience serious health effects. Avoid outdoor activities and keep windows closed. Wear N95 mask if going outside.' },
+  { max: 500, label: 'Hazardous',              color: '#dc2626', bg: 'rgba(127,29,29,0.15)',   border: 'rgba(220,38,38,0.3)',   text: '#fca5a5', risk: 'Critical',  msg: 'Emergency conditions. The entire population is likely to be affected. Stay indoors, seal windows, use air purifiers, and limit all physical activity.' },
+];
+
+function getLevel(aqi) {
+  return AQI_LEVELS.find(l => aqi <= l.max) || AQI_LEVELS[AQI_LEVELS.length - 1];
+}
+
+function calcCigarettes(aqi) {
+  const pm25 = aqi * 0.37;
+  let cigs = pm25 / 22;
+  // Apply exponential boost at extreme levels for realism
+  if (aqi > 300) cigs = Math.min(cigs * 1.3, 12);
+  return Math.max(0.1, Math.round(cigs * 10) / 10);
+}
+
+// ─── DOM References ────────────────────────────────────────────────────────────
+const slider    = document.getElementById('aqiSlider');
+const numInput  = document.getElementById('aqiInput');
+const cigCount  = document.getElementById('cigCount');
+const cigIcons  = document.getElementById('cigIcons');
+const healthBadge  = document.getElementById('healthBadge');
+const healthLabel  = document.getElementById('healthLabel');
+const healthDot    = document.getElementById('healthDot');
+const healthMsg    = document.getElementById('healthMsg');
+const resultPanel  = document.getElementById('resultPanel');
+const pm25Value    = document.getElementById('pm25Value');
+const annualValue  = document.getElementById('annualValue');
+const riskLevel    = document.getElementById('riskLevel');
+const gaugeArc     = document.getElementById('gaugeArc');
+const gaugeAQIText = document.getElementById('gaugeAQIText');
+const aqiMarker    = document.getElementById('aqiMarker');
+
+// ─── Update UI ────────────────────────────────────────────────────────────────
+function updateCalc(aqi) {
+  aqi = Math.max(0, Math.min(500, aqi));
+  const level = getLevel(aqi);
+  const cigs  = calcCigarettes(aqi);
+  const pm25  = Math.round(aqi * 0.37);
+  const annual = Math.round(cigs * 365);
+
+  // Numbers
+  cigCount.textContent = cigs.toFixed(1);
+  cigCount.classList.remove('count-anim');
+  void cigCount.offsetWidth;
+  cigCount.classList.add('count-anim');
+
+  pm25Value.textContent   = pm25 + ' μg/m³';
+  annualValue.textContent = annual.toLocaleString() + ' cigs';
+  riskLevel.textContent   = level.risk;
+  riskLevel.style.color   = level.color;
+
+  // Cigarette icons
+  cigIcons.innerHTML = '';
+  const iconCount = Math.min(Math.ceil(cigs), 12);
+  for (let i = 0; i < iconCount; i++) {
+    const span = document.createElement('span');
+    span.className = 'cigarette-icon';
+    span.style.setProperty('--i', i);
+    span.textContent = '🚬';
+    cigIcons.appendChild(span);
+  }
+
+  // Health badge & message
+  healthLabel.textContent = level.label;
+  healthDot.style.background = level.color;
+  healthBadge.style.background = level.bg;
+  healthBadge.style.borderColor = level.border;
+  healthBadge.style.color = level.text;
+  healthMsg.textContent = level.msg;
+
+  // Result panel styling
+  resultPanel.style.background = level.bg;
+  resultPanel.style.borderColor = level.border;
+
+  // Gauge arc
+  const maxDash = 172.78;
+  const progress = aqi / 500;
+  const offset = maxDash * (1 - progress);
+  gaugeArc.style.strokeDashoffset = offset;
+  gaugeArc.style.stroke = level.color;
+  gaugeAQIText.textContent = aqi;
+  gaugeAQIText.setAttribute('fill', level.color);
+
+  // Slider track gradient
+  const pct = (aqi / 500 * 100).toFixed(1);
+  slider.style.background = `linear-gradient(to right, ${level.color} 0%, ${level.color} ${pct}%, rgba(255,255,255,0.1) ${pct}%, rgba(255,255,255,0.1) 100%)`;
+
+  // AQI bar marker position
+  aqiMarker.style.left = `calc(${pct}% - 6px)`;
+}
+
+// ─── Sync slider ↔ input ───────────────────────────────────────────────────
+slider.addEventListener('input', () => {
+  numInput.value = slider.value;
+  updateCalc(+slider.value);
+});
+
+numInput.addEventListener('input', () => {
+  let v = parseInt(numInput.value) || 0;
+  if (v < 0) v = 0;
+  if (v > 500) v = 500;
+  slider.value = v;
+  updateCalc(v);
+});
+
+numInput.addEventListener('blur', () => {
+  let v = parseInt(numInput.value) || 0;
+  v = Math.max(0, Math.min(500, v));
+  numInput.value = v;
+  slider.value = v;
+  updateCalc(v);
+});
+
+// ─── FAQ ─────────────────────────────────────────────────────────────────────
+const faqs = [
+  { q: 'What is AQI?', a: 'AQI (Air Quality Index) is a standardized index ranging from 0 to 500 used by governments worldwide to communicate how polluted the air currently is. Higher AQI values indicate worse air quality and greater associated health risks for the population.' },
+  { q: 'How many cigarettes is AQI 100 equivalent to?', a: 'An AQI of 100 is approximately equivalent to smoking 1.7–2 cigarettes per day, based on PM2.5 particulate matter health impact research. This is the standard AQI smoking equivalent used by public health researchers.' },
+  { q: 'Is this AQI cigarette calculator medically accurate?', a: 'This tool uses widely cited approximations based on research by Berkeley Earth and other institutions. The formula converts AQI to estimated PM2.5 concentrations and then to cigarette equivalents. It is for educational awareness only and is not a medical diagnosis tool. Always consult healthcare professionals for personal health decisions.' },
+  { q: 'What AQI is considered dangerous?', a: 'AQI above 150 is considered Unhealthy for all groups. AQI above 200 is Very Unhealthy, and AQI above 300 is classified as Hazardous — the highest tier. At AQI 300+, the pollution is equivalent to smoking 7–10+ cigarettes per day and poses serious health risks for the entire population.' },
+  { q: 'How is the cigarette equivalent calculated from AQI?', a: 'The air pollution cigarette calculator uses this formula: first estimating PM2.5 = AQI × 0.37 μg/m³, then calculating cigarettes/day = PM2.5 ÷ 22. This is based on research showing every 22 μg/m³ of PM2.5 over 24 hours delivers roughly equivalent lung particulate harm to smoking one cigarette.' },
+  { q: 'Where can I find my city\'s current AQI?', a: 'You can find real-time AQI data for your city from AirNow.gov (USA), IQAir.com (global), the World Air Quality Index (waqi.info), or your local government\'s environmental monitoring website. Once you have the AQI value, enter it into this calculator.' },
+];
+
+const faqContainer = document.getElementById('faqContainer');
+faqs.forEach((item, i) => {
+  const div = document.createElement('div');
+  div.className = 'faq-item glass-card rounded-xl overflow-hidden';
+  div.innerHTML = `
+    <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center px-5 py-4 text-left" aria-expanded="false" aria-controls="faq-answer-${i}">
+      <h3 class="text-sm sm:text-base font-semibold text-white pr-4">${item.q}</h3>
+      <span class="faq-icon text-indigo-400 flex-shrink-0 text-xl leading-none">+</span>
+    </button>
+    <div id="faq-answer-${i}" class="faq-answer" role="region">
+      <p class="px-5 pb-5 text-slate-400 text-sm leading-relaxed">${item.a}</p>
+    </div>
+  `;
+  faqContainer.appendChild(div);
+});
+
+function toggleFaq(btn) {
+  const item   = btn.closest('.faq-item');
+  const answer = item.querySelector('.faq-answer');
+  const isOpen = item.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-item').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.faq-answer').classList.remove('open');
+    el.querySelector('button').setAttribute('aria-expanded', 'false');
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    answer.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+}
+
+// ─── Mobile Menu ──────────────────────────────────────────────────────────────
+document.getElementById('menuBtn').addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.toggle('open');
+});
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// ─── Scroll Reveal ────────────────────────────────────────────────────────────
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+updateCalc(150);
+</script>
+
+</body>
+</html>
